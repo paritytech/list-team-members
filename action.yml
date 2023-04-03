@@ -1,0 +1,25 @@
+name: "List Team Members"
+description: "Lists all the members of an Organization's team"
+author: paritytech
+branding:
+  icon: users
+  color: organge
+inputs:
+  ACCESS_TOKEN:
+    required: true
+    description: The token to access the repo
+  organization:
+    required: false
+    description: The repository to fetch the issues from
+  team:
+    required: false
+    description: The name of the org/user that owns the repository
+outputs:
+  usernames:
+    description: 'All of the usernames combined by a comma'
+  data:
+    description: 'A JSON object with the users data'
+
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/paritytech/list-team-members/action:0.0.1'
