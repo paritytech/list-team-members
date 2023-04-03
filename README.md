@@ -1,6 +1,9 @@
 
-# list team members
+# List team members
 GitHub action to lists all the members of an Organization's team.
+
+
+[![Publish](https://github.com/paritytech/list-team-members/actions/workflows/publish.yml/badge.svg?branch=master)](https://github.com/paritytech/list-team-members/actions/workflows/publish.yml)
 
 ## Why?
 
