@@ -46,7 +46,7 @@ async fn main() {
             .collect::<Vec<String>>()
             .join(","),
     );
-    set_output("team-data", serde_json::to_string(&team).unwrap())
+    set_output("data", serde_json::to_string(&team).unwrap())
 }
 
 #[derive(Debug, Clone, serde_derive::Serialize)]
