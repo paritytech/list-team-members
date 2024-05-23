@@ -1,17 +1,8 @@
-FROM node:18 as Builder
+FROM rust:1.67
 
-WORKDIR /action
-
-COPY package.json yarn.lock ./
-
-RUN yarn install --frozen-lockfile
-
+WORKDIR /usr/src/action
 COPY . .
 
-RUN yarn run build
+RUN cargo install --path .
 
-FROM node:18-slim
-
-COPY --from=Builder /action/dist /action
-
-ENTRYPOINT ["node", "/action/index.js"]
+CMD ["action"]
