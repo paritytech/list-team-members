@@ -8,7 +8,6 @@ edition = "2021"
 [dependencies]
 actions-core = "0.0.2"
 anyhow = "1.0.86"
-json = "0.12.4"
 octocrab = "0.38.0"
 serde = "1.0.202"
 serde_derive = "1.0.202"
