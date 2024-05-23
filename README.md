@@ -124,10 +124,11 @@ Because this project is intended to be used with a token we need to do an extra 
 ```
 
 ## Development
+
 To work on this app, you require
-- `Node 18.x`
-- `yarn`
 
-Use `yarn install` to set up the project.
+- `Rust`
 
-`yarn build` compiles the TypeScript code to JavaScript.
+Use `cargo run` to run the project.
+
+`cargo build` compiles the Rust code to an executable.
