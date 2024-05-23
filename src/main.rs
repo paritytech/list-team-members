@@ -1,7 +1,6 @@
-use core::fmt;
 use std::env;
 
-use actions_core::{set_output, LogLevel};
+use actions_core::set_output;
 use anyhow::Result;
 use octocrab::Octocrab;
 
@@ -23,11 +22,9 @@ async fn main() {
         .parse()
         .expect("Failed to parse access token");
 
-    // println!("Token is {}", token);
-
     let crab = Octocrab::builder().personal_token(token).build();
     octocrab::initialise(crab.unwrap());
-    println!("Hello, world!");
+
     let team = fetch_team(org, team_name).await.unwrap();
 
     if team.is_empty() {
