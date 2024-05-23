@@ -1,8 +1,12 @@
-FROM rust:1.78
+FROM rust:latest
 
 WORKDIR /usr/src/action
-COPY . .
 
-RUN cargo install --path .
+COPY Cargo.toml .
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo build --release
 
-CMD ["action"]
+COPY src src
+RUN touch src/main.rs
+
+CMD ["cargo", "run", "--release"]
