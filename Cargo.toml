@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 actions-core = "0.0.2"
+actions-github = "0.0.2"
 anyhow = "1.0.86"
 octocrab = "0.38.0"
 serde = "1.0.202"
