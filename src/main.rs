@@ -1,5 +1,6 @@
 use actions_github::context::get_context;
 use actions_github::core::{get_input, set_output};
+use actions_github::logger;
 use anyhow::Result;
 use octocrab::Octocrab;
 
@@ -27,7 +28,7 @@ async fn main() {
         );
     }
 
-    actions_core::debug(format!("Obtained data from {} users", team.len()));
+    logger::debug_log(format!("Obtained data from {} users", team.len()).as_str());
     if let Err(err) = set_output(
         "usernames",
         team.clone()
