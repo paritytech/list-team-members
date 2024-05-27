@@ -11,9 +11,9 @@ async fn main() {
     };
     let org: String = ctx.repo.owner;
 
-    let team_name:String = get_variable("team", true);
+    let team_name: String = get_variable("team", true);
 
-    let token:String = get_variable("ACCESS_TOKEN", true);
+    let token: String = get_variable("ACCESS_TOKEN", true);
 
     let crab = Octocrab::builder().personal_token(token).build();
     octocrab::initialise(crab.unwrap());
@@ -28,15 +28,22 @@ async fn main() {
     }
 
     actions_core::debug(format!("Obtained data from {} users", team.len()));
-    set_output(
+    if let Err(err) = set_output(
         "usernames",
         team.clone()
             .iter()
             .map(|member| member.username.clone())
             .collect::<Vec<String>>()
-            .join(",").as_str(),
-    );
-    set_output("data", serde_json::to_string(&team).unwrap().as_str())?
+            .join(",")
+            .as_str(),
+    ) {
+        panic!("{:#?}", err);
+    }
+
+    let data = serde_json::to_string(&team).unwrap();
+    if let Err(err) = set_output("data", data.as_str()) {
+        panic!("{:#?}", err);
+    }
 }
 
 #[derive(Debug, Clone, serde_derive::Serialize)]
@@ -46,10 +53,16 @@ struct UserData {
     pub avatar: String,
 }
 
-fn get_variable(var_name: &str, required:bool) -> String {
+fn get_variable(var_name: &str, required: bool) -> String {
     match get_input(var_name) {
-        Ok(variable) => return variable,
-        Err(err) => panic!("{}", err)
+        Ok(variable) => variable,
+        Err(err) => {
+            if required {
+                panic!("{}", err)
+            } else {
+                String::from("")
+            }
+        }
     }
 }
 
