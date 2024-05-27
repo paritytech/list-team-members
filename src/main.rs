@@ -1,5 +1,6 @@
 use actions_core::set_output;
 use actions_github::context::get_context;
+use actions_github::core::get_input;
 use anyhow::Result;
 use octocrab::Octocrab;
 
@@ -7,19 +8,13 @@ use octocrab::Octocrab;
 async fn main() {
     let ctx = match get_context() {
         Ok(context) => context,
-        Err(error) => panic!("{}", error)
+        Err(error) => panic!("{}", error),
     };
     let org: String = ctx.repo.owner;
 
-    let team_name: String = actions_core::input("team")
-        .expect("Missing team name")
-        .parse()
-        .expect("Failed to parse team name");
+    let team_name:String = get_variable("team", true);
 
-    let token: String = actions_core::input("ACCESS_TOKEN")
-        .expect("Missing access token")
-        .parse()
-        .expect("Failed to parse access token");
+    let token:String = get_variable("ACCESS_TOKEN", true);
 
     let crab = Octocrab::builder().personal_token(token).build();
     octocrab::initialise(crab.unwrap());
@@ -50,6 +45,13 @@ struct UserData {
     pub username: String,
     pub url: String,
     pub avatar: String,
+}
+
+fn get_variable(var_name: &str, required:bool) -> String {
+    match get_input(var_name) {
+        Ok(variable) => return variable,
+        Err(err) => panic!("{}", err)
+    }
 }
 
 async fn fetch_team(org: String, team: &String) -> Result<Vec<UserData>> {
