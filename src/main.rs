@@ -1,6 +1,5 @@
-use actions_core::set_output;
 use actions_github::context::get_context;
-use actions_github::core::get_input;
+use actions_github::core::{get_input, set_output};
 use anyhow::Result;
 use octocrab::Octocrab;
 
@@ -35,9 +34,9 @@ async fn main() {
             .iter()
             .map(|member| member.username.clone())
             .collect::<Vec<String>>()
-            .join(","),
+            .join(",").as_str(),
     );
-    set_output("data", serde_json::to_string(&team).unwrap())
+    set_output("data", serde_json::to_string(&team).unwrap().as_str())?
 }
 
 #[derive(Debug, Clone, serde_derive::Serialize)]
