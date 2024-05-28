@@ -1,17 +1,11 @@
-FROM node:18 as Builder
+FROM rust:latest
 
-WORKDIR /action
+WORKDIR /usr/src/action
 
-COPY package.json yarn.lock ./
+COPY Cargo.toml .
 
-RUN yarn install --frozen-lockfile
+COPY src src
 
-COPY . .
+RUN cargo build --release
 
-RUN yarn run build
-
-FROM node:18-slim
-
-COPY --from=Builder /action/dist /action
-
-ENTRYPOINT ["node", "/action/index.js"]
+CMD ["/usr/src/action/target/release/list-team-members"]

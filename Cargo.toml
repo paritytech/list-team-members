@@ -1,0 +1,15 @@
+[package]
+name = "list-team-members"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actions-github = "0.0.5"
+anyhow = "1.0.86"
+octocrab = "0.38.0"
+serde = "1.0.202"
+serde_derive = "1.0.202"
+serde_json = "1.0.117"
+tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread"] }

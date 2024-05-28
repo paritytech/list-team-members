@@ -1,0 +1,30 @@
+name: Find team members
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  get-team:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch team data
+        # We add the id to access to this step outputs
+        id: teams
+        uses: paritytech/list-team-members@main
+        with:
+          ACCESS_TOKEN: ${{ secrets.READ_ORG_PAT }}
+          team: opstooling
+          # optional, in case that it searches on a different organization
+          organization: paritytech
+        # example showing how to use the content
+      - name: Show data
+        run: |
+          echo "The users are $USERNAMES"
+          echo "Data: $DATA"
+        env:
+          USERNAMES: ${{ steps.teams.outputs.usernames }}"
+          # a json object
+          DATA: ${{ steps.teams.outputs.data }}"
