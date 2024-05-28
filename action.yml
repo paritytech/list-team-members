@@ -22,4 +22,4 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://ghcr.io/paritytech/list-team-members/action:0.0.1'
