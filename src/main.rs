@@ -6,15 +6,12 @@ use octocrab::Octocrab;
 
 #[tokio::main]
 async fn main() {
-    let ctx = match get_context() {
-        Ok(context) => context,
-        Err(error) => panic!("{}", error),
-    };
+    let ctx = get_context().expect("Failed to resolve GHA context");
     let org: String = ctx.repo.owner;
 
-    let team_name: String = get_variable("team", true);
+    let team_name: String = get_input("team").expect("Failed to get 'team' input");
 
-    let token: String = get_variable("ACCESS_TOKEN", true);
+    let token: String = get_input("ACCESS_TOKEN").expect("Failed to get 'ACCESS_TOKEN' input");
 
     let crab = Octocrab::builder().personal_token(token).build();
     octocrab::initialise(crab.unwrap());
@@ -29,7 +26,7 @@ async fn main() {
     }
 
     logger::debug_log(format!("Obtained data from {} users", team.len()).as_str());
-    if let Err(err) = set_output(
+    set_output(
         "usernames",
         team.clone()
             .iter()
@@ -37,9 +34,8 @@ async fn main() {
             .collect::<Vec<String>>()
             .join(",")
             .as_str(),
-    ) {
-        panic!("{:#?}", err);
-    }
+    )
+    .expect("set_output failed");
 
     let data = serde_json::to_string(&team).unwrap();
     if let Err(err) = set_output("data", data.as_str()) {
@@ -52,19 +48,6 @@ struct UserData {
     pub username: String,
     pub url: String,
     pub avatar: String,
-}
-
-fn get_variable(var_name: &str, required: bool) -> String {
-    match get_input(var_name) {
-        Ok(variable) => variable,
-        Err(err) => {
-            if required {
-                panic!("{}", err)
-            } else {
-                String::from("")
-            }
-        }
-    }
 }
 
 async fn fetch_team(org: String, team: &String) -> Result<Vec<UserData>> {
