@@ -28,8 +28,7 @@ async fn main() {
     logger::debug_log(format!("Obtained data from {} users", team.len()).as_str());
     set_output(
         "usernames",
-        team.clone()
-            .iter()
+        team.iter()
             .map(|member| member.username.clone())
             .collect::<Vec<String>>()
             .join(",")
